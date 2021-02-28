@@ -2,7 +2,7 @@
   "name": "golf-gamblers-front-end",
   "version": "0.1.0",
   "private": true,
-  "homepage": "",
+  "homepage": "https://cole-gannaway.github.io/golf-gamblers-front-end/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
