@@ -6,18 +6,19 @@ import {
     Route,
     Link,
 } from "react-router-dom";
+import Login from "./auth/Login";
 
 
 export default function Main() {
     return <Router>
         <Switch>
-            <Route path="/test">
-                <div>Testing...</div>
+            <Route path="/login">
+                <Login></Login>
                 <Link to="/">Back to Home</Link>
             </Route>
             <Route path="/">
                 <div>Welcome Home</div>
-                <Link to="/test">Test Link</Link>
+                <Link to="/login">Login</Link>
             </Route>
         </Switch>
     </Router>
