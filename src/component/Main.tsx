@@ -1,7 +1,7 @@
 // import router
 import React from "react";
 import {
-    BrowserRouter as Router,
+    HashRouter,
     Switch,
     Route,
     Link,
@@ -10,7 +10,7 @@ import Login from "./auth/Login";
 
 
 export default function Main() {
-    return <Router>
+    return <HashRouter basename='/'>
         <Switch>
             <Route path="/login">
                 <Login></Login>
@@ -21,5 +21,5 @@ export default function Main() {
                 <Link to="/login">Login</Link>
             </Route>
         </Switch>
-    </Router>
+    </HashRouter>
 }
