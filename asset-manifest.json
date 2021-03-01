@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "/golf-gamblers-front-end/static/css/main.afd7172b.chunk.css",
-    "main.js": "/golf-gamblers-front-end/static/js/main.ea01927a.chunk.js",
-    "main.js.map": "/golf-gamblers-front-end/static/js/main.ea01927a.chunk.js.map",
-    "runtime-main.js": "/golf-gamblers-front-end/static/js/runtime-main.f303d0e0.js",
-    "runtime-main.js.map": "/golf-gamblers-front-end/static/js/runtime-main.f303d0e0.js.map",
-    "static/js/2.722d2e9d.chunk.js": "/golf-gamblers-front-end/static/js/2.722d2e9d.chunk.js",
-    "static/js/2.722d2e9d.chunk.js.map": "/golf-gamblers-front-end/static/js/2.722d2e9d.chunk.js.map",
-    "static/js/3.c064d726.chunk.js": "/golf-gamblers-front-end/static/js/3.c064d726.chunk.js",
-    "static/js/3.c064d726.chunk.js.map": "/golf-gamblers-front-end/static/js/3.c064d726.chunk.js.map",
+    "main.js": "/golf-gamblers-front-end/static/js/main.ba6651e4.chunk.js",
+    "main.js.map": "/golf-gamblers-front-end/static/js/main.ba6651e4.chunk.js.map",
+    "runtime-main.js": "/golf-gamblers-front-end/static/js/runtime-main.3f49f054.js",
+    "runtime-main.js.map": "/golf-gamblers-front-end/static/js/runtime-main.3f49f054.js.map",
+    "static/js/2.2fbfc92d.chunk.js": "/golf-gamblers-front-end/static/js/2.2fbfc92d.chunk.js",
+    "static/js/2.2fbfc92d.chunk.js.map": "/golf-gamblers-front-end/static/js/2.2fbfc92d.chunk.js.map",
+    "static/js/3.db2c0ae2.chunk.js": "/golf-gamblers-front-end/static/js/3.db2c0ae2.chunk.js",
+    "static/js/3.db2c0ae2.chunk.js.map": "/golf-gamblers-front-end/static/js/3.db2c0ae2.chunk.js.map",
     "index.html": "/golf-gamblers-front-end/index.html",
     "service-worker.js": "/golf-gamblers-front-end/service-worker.js",
     "service-worker.js.map": "/golf-gamblers-front-end/service-worker.js.map",
     "static/css/main.afd7172b.chunk.css.map": "/golf-gamblers-front-end/static/css/main.afd7172b.chunk.css.map",
-    "static/js/2.722d2e9d.chunk.js.LICENSE.txt": "/golf-gamblers-front-end/static/js/2.722d2e9d.chunk.js.LICENSE.txt"
+    "static/js/2.2fbfc92d.chunk.js.LICENSE.txt": "/golf-gamblers-front-end/static/js/2.2fbfc92d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.f303d0e0.js",
-    "static/js/2.722d2e9d.chunk.js",
+    "static/js/runtime-main.3f49f054.js",
+    "static/js/2.2fbfc92d.chunk.js",
     "static/css/main.afd7172b.chunk.css",
-    "static/js/main.ea01927a.chunk.js"
+    "static/js/main.ba6651e4.chunk.js"
   ]
 }
