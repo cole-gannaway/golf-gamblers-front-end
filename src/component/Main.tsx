@@ -1,25 +1,51 @@
-// import router
 import React from "react";
+// import router
 import {
-    HashRouter,
+    BrowserRouter as Router,
     Switch,
     Route,
-    Link,
+    Redirect,
 } from "react-router-dom";
+import { useUserContext } from "../context/AuthProvider";
 import Login from "./auth/Login";
 
 
 export default function Main() {
-    return <HashRouter basename='/'>
+    const user = useUserContext();
+    return <Router>
         <Switch>
             <Route path="/login">
                 <Login></Login>
-                <Link to="/">Back to Home</Link>
             </Route>
-            <Route path="/">
-                <div>Welcome Home</div>
-                <Link to="/login">Login</Link>
-            </Route>
+            <PrivateRoute path="/">
+                <div>Welcome {user?.email} !</div>
+            </PrivateRoute>
         </Switch>
-    </HashRouter>
+    </Router>
+}
+
+interface IRouteProps {
+    children: any,
+    path: string
+}
+
+function PrivateRoute({ children, ...rest }: IRouteProps) {
+    let user = useUserContext();
+    return (
+        <Route
+            {...rest}
+            render={({ location }) =>
+                user ? (
+                    children
+                ) : (
+                        <Redirect
+                            to={{
+                                pathname: "/login",
+                                state: { from: location }
+                            }}
+                        />
+                    )
+            }
+        />
+    );
 }
