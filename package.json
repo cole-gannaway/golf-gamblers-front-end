@@ -2,7 +2,7 @@
   "name": "golf-gamblers-front-end",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cole-gannaway.github.io/golf-gamblers-front-end/",
+  "homepage": "https://www.ibetgolf.co",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@testing-library/jest-dom": "^5.11.9",
