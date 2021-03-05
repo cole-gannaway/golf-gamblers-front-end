@@ -10,7 +10,7 @@ import FireBaseConfig from '../config/firebase.config.json'
 const app = (!firebase.apps.length) ? firebase.initializeApp(FireBaseConfig) : firebase.app();
 const db = app.firestore();
 const auth = app.auth();
-auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 // create contexts
 const AuthContext = createContext<firebase.auth.Auth>(auth);
