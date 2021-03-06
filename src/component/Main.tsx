@@ -1,24 +1,51 @@
-// import router
 import React from "react";
+// import router
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
+    Redirect,
 } from "react-router-dom";
+import { useUserContext } from "../context/AuthProvider";
+import Login from "./auth/Login";
 
 
 export default function Main() {
+    const user = useUserContext();
     return <Router>
         <Switch>
-            <Route path="/test">
-                <div>Testing...</div>
-                <Link to="/">Back to Home</Link>
+            <Route path="/login">
+                <Login></Login>
             </Route>
-            <Route path="/">
-                <div>Welcome Home</div>
-                <Link to="/test">Test Link</Link>
-            </Route>
+            <PrivateRoute path="/">
+                <div>Welcome {user?.email} !</div>
+            </PrivateRoute>
         </Switch>
     </Router>
+}
+
+interface IRouteProps {
+    children: any,
+    path: string
+}
+
+function PrivateRoute({ children, ...rest }: IRouteProps) {
+    let user = useUserContext();
+    return (
+        <Route
+            {...rest}
+            render={({ location }) =>
+                user ? (
+                    children
+                ) : (
+                        <Redirect
+                            to={{
+                                pathname: "/login",
+                                state: { from: location }
+                            }}
+                        />
+                    )
+            }
+        />
+    );
 }
