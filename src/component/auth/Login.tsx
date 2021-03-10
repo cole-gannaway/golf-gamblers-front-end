@@ -6,30 +6,29 @@ import "firebase/firestore";
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { Redirect } from "react-router-dom";
 
-import { useAuthContext, useUserContext } from '../../context/AuthProvider';
-
-// Configure FirebaseUI.
-const uiConfig = {
-    // Popup signin flow rather than redirect flow.
-    signInFlow: 'popup',
-    // We will display email
-    signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-    ],
-    callbacks: {
-        // Avoid redirects after sign-in.
-        signInSuccessWithAuthResult: () => false
-    }
-};
+import { getAuth, useUserContext } from '../../context/AuthProvider';
 
 export default function Login() {
-    const authContext = useAuthContext();
-    const userContext = useUserContext();
-    if (userContext) {
+    const auth = getAuth();
+    const user = useUserContext();
+    // Configure FirebaseUI.
+    const uiConfig = {
+        // Popup signin flow rather than redirect flow.
+        signInFlow: 'popup',
+        // We will display email
+        signInOptions: [
+            firebase.auth.EmailAuthProvider.PROVIDER_ID
+        ],
+        callbacks: {
+            // Avoid redirects after sign-in.
+            signInSuccessWithAuthResult: () => false
+        }
+    };
+    if (user) {
         return <Redirect to="/" />
     } else {
         return <div>
-            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={authContext} />
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
         </div>
     }
 }
