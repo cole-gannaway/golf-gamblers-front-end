@@ -7,18 +7,21 @@ import {
     Redirect,
 } from "react-router-dom";
 import { useUserContext } from "../context/AuthProvider";
+import Account from "./Account";
 import Login from "./auth/Login";
-
+import Home from "./Home";
 
 export default function Main() {
-    const user = useUserContext();
     return <Router>
         <Switch>
             <Route path="/login">
                 <Login></Login>
             </Route>
+            <PrivateRoute path="/account">
+                <Account></Account>
+            </PrivateRoute>
             <PrivateRoute path="/">
-                <div>Welcome {user?.email} !</div>
+                <Home></Home>
             </PrivateRoute>
         </Switch>
     </Router>
@@ -30,7 +33,7 @@ interface IRouteProps {
 }
 
 function PrivateRoute({ children, ...rest }: IRouteProps) {
-    let user = useUserContext();
+    const user = useUserContext();
     return (
         <Route
             {...rest}
