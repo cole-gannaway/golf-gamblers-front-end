@@ -15,7 +15,7 @@ const db = app.firestore();
 const auth = app.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 const functions = app.functions('us-central1');
-let unsubscribeFromSubscriptionsDb: (() => void) | undefined = undefined;
+let unsubscribeCallbacks: (() => void)[] = [];
 
 // create contexts
 const AuthUserContext = createContext<firebase.User | null>(null);
@@ -32,7 +32,7 @@ export function AuthProvider(props: IAuthContextProps) {
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                unsubscribeFromSubscriptionsDb = db.collection('customers')
+                const unsubscribe = db.collection('customers')
                     .doc(user.uid)
                     .collection('subscriptions')
                     .onSnapshot((snap) => {
@@ -44,6 +44,7 @@ export function AuthProvider(props: IAuthContextProps) {
                             }
                         });
                     });
+                unsubscribeCallbacks.push(unsubscribe);
             } else {
                 setSubscriptionState(undefined);
             }
@@ -78,20 +79,33 @@ export function getFunctions() {
     return functions
 }
 
-function unsubscribeToSubscriptionState() {
-    if (unsubscribeFromSubscriptionsDb) {
-        unsubscribeFromSubscriptionsDb();
-        unsubscribeFromSubscriptionsDb = undefined;
+/**
+ * Any onSnapshot calls from firebase will return an unsubscribe 
+ * method to kill the listener to that portion of the database, 
+ * all listeners will want to be killed on logout or on account delete.
+ * Push the unsubscribe method to be called later during one of these actions.
+ */
+export function pushUnsubscribeCallback(unsubscribe: (() => void)) {
+    unsubscribeCallbacks.push(unsubscribe);
+}
+
+function unsubScribeFromAllListeners() {
+    // call each unsubscribe method
+    for (let i = 0; i < unsubscribeCallbacks.length; i++) {
+        const unsubscribe = unsubscribeCallbacks[i];
+        unsubscribe();
     }
+    // reset array
+    unsubscribeCallbacks = [];
 }
 
 export function logout() {
-    unsubscribeToSubscriptionState();
+    unsubScribeFromAllListeners();
     auth.signOut();
 }
 
 export function deleteAccount(user: firebase.User) {
-    unsubscribeToSubscriptionState();
+    unsubScribeFromAllListeners();
     user.delete().then(() => console.log('Successfully deleted account')).catch((e) => console.error(e));
 }
 
