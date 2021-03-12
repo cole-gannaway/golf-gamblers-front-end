@@ -23,6 +23,10 @@ export default function Main() {
             <PrivateRoute path="/">
                 <Home></Home>
             </PrivateRoute>
+            {/* Default path back to home */}
+            <PrivateRoute path="*">
+                <Redirect to="/"></Redirect>
+            </PrivateRoute>
         </Switch>
     </Router>
 }

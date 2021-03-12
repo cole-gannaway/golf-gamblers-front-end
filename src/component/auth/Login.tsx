@@ -34,8 +34,12 @@ export default function Login() {
             initialPath = state.from.pathname;
         }
     }
-    if (user && initialPath) {
-        return <Redirect to={initialPath}></Redirect>;
+    if (user) {
+        if (initialPath && initialPath !== '/login') {
+            return <Redirect to={initialPath}></Redirect>;
+        } else {
+            return <Redirect to="/"></Redirect>;
+        }
     } else {
         return <div id="firebaseui-auth-container">
             <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
