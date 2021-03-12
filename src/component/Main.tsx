@@ -10,12 +10,16 @@ import { useUserContext } from "../context/AuthProvider";
 import Account from "./Account";
 import Login from "./auth/Login";
 import Home from "./Home";
+import Info from "./Info";
 
 export default function Main() {
     return <Router>
         <Switch>
             <Route path="/login">
                 <Login></Login>
+            </Route>
+            <Route path="/info">
+                <Info></Info>
             </Route>
             <PrivateRoute path="/account">
                 <Account></Account>
@@ -45,13 +49,13 @@ function PrivateRoute({ children, ...rest }: IRouteProps) {
                 user ? (
                     children
                 ) : (
-                        <Redirect
-                            to={{
-                                pathname: "/login",
-                                state: { from: location }
-                            }}
-                        />
-                    )
+                    <Redirect
+                        to={{
+                            pathname: "/login",
+                            state: { from: location }
+                        }}
+                    />
+                )
             }
         />
     );
