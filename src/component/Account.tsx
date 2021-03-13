@@ -4,6 +4,8 @@ import { Button, TextField } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BlockIcon from '@material-ui/icons/Block';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
 
 import { createPortalLink, getDb, getFunctions, useUserContext, logout, useSubscriptionContext, deleteAccount } from "../context/AuthProvider";
 import StripeConfig from '../config/stripe.config.json'
@@ -74,7 +76,7 @@ export default function Account() {
             <br></br>
             <div><TextField variant={matVariant} fullWidth={true} label="Name" value={displayName} onChange={(e) => setDisplayName(e.target.value)} /></div>
             <br></br>
-            <Button variant={matVariant} onClick={handleUpdateProfile} disabled={true}>Save</Button>
+            <Button variant={matVariant} fullWidth={true} startIcon={<SaveIcon />} onClick={handleUpdateProfile} disabled={true}>Save</Button>
         </div>
         <div>
             <h2>Subscriptions</h2>
@@ -89,11 +91,11 @@ export default function Account() {
             <br></br>
             {subscriptionState ?
                 <div>
-                    <Button variant={matVariant} onClick={handleCreatePortalLink}>Manage Subscriptions</Button>
+                    <Button variant={matVariant} fullWidth={true} onClick={handleCreatePortalLink}>Manage Subscriptions</Button>
                     {isRedirectingToManageStripeAccount ? <CircularProgress /> : <div></div>}
                 </div> :
                 <div>
-                    <Button variant={matVariant} onClick={handleCreateNewSubscription}>Subscribe</Button>
+                    <Button variant={matVariant} fullWidth={true} onClick={handleCreateNewSubscription} >Subscribe</Button>
                     {isRedirectingToCreateSubscription ? <CircularProgress /> : <div></div>}
                 </div>
             }
@@ -102,11 +104,11 @@ export default function Account() {
         </div>
         <br></br>
         <div>
-            <Button variant={matVariant} onClick={handleLogout} >Logout</Button>
+            <Button variant={matVariant} fullWidth={true} onClick={handleLogout} >Logout</Button>
         </div>
         <br></br>
         <div>
-            <Button variant={matVariant} onClick={handleDeleteAccount} color="secondary">Delete Account</Button>
+            <Button variant={matVariant} fullWidth={true} startIcon={<DeleteIcon />} onClick={handleDeleteAccount} color="secondary">Delete Account</Button>
         </div>
     </div>
 }
