@@ -41,8 +41,11 @@ export default function Login() {
             return <Redirect to="/"></Redirect>;
         }
     } else {
-        return <div id="firebaseui-auth-container">
-            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+        return <div>
+            <div style={{ height: "20px" }}>  </div>
+            <div id="firebaseui-auth-container">
+                <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+            </div>
         </div>
     }
 }

@@ -1,4 +1,3 @@
-import React from "react";
 // import router
 import {
     BrowserRouter as Router,
@@ -11,28 +10,32 @@ import Account from "./Account";
 import Login from "./auth/Login";
 import Home from "./Home";
 import Info from "./Info";
+import NavBar from "./NavBar";
 
 export default function Main() {
-    return <Router>
-        <Switch>
-            <Route path="/login">
-                <Login></Login>
-            </Route>
-            <Route path="/info">
-                <Info></Info>
-            </Route>
-            <PrivateRoute path="/account">
-                <Account></Account>
-            </PrivateRoute>
-            <PrivateRoute path="/">
-                <Home></Home>
-            </PrivateRoute>
-            {/* Default path back to home */}
-            <PrivateRoute path="*">
-                <Redirect to="/"></Redirect>
-            </PrivateRoute>
-        </Switch>
-    </Router>
+    return <div style={{ textAlign: "center" }}>
+        <Router>
+            <NavBar></NavBar>
+            <Switch>
+                <Route path="/login">
+                    <Login></Login>
+                </Route>
+                <Route path="/info">
+                    <Info></Info>
+                </Route>
+                <PrivateRoute path="/account">
+                    <Account></Account>
+                </PrivateRoute>
+                <PrivateRoute path="/">
+                    <Home></Home>
+                </PrivateRoute>
+                {/* Default path back to home */}
+                <PrivateRoute path="*">
+                    <Redirect to="/"></Redirect>
+                </PrivateRoute>
+            </Switch>
+        </Router>
+    </div>
 }
 
 interface IRouteProps {
