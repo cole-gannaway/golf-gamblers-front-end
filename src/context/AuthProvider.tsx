@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 // import Firebase
 import firebase from "firebase/app";
@@ -15,7 +16,7 @@ const db = app.firestore();
 const auth = app.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 const functions = app.functions('us-central1');
-let unsubscribeCallbacks: (() => void)[] = [];
+let unsubscribeCallbacksMap: Map<string, (() => void)> = new Map();
 
 // create contexts
 const AuthUserContext = createContext<firebase.User | null>(null);
@@ -44,7 +45,7 @@ export function AuthProvider(props: IAuthContextProps) {
                             }
                         });
                     });
-                unsubscribeCallbacks.push(unsubscribe);
+                pushUnsubscribeCallback(unsubscribe);
             } else {
                 setSubscriptionState(undefined);
             }
@@ -86,17 +87,28 @@ export function getFunctions() {
  * Push the unsubscribe method to be called later during one of these actions.
  */
 export function pushUnsubscribeCallback(unsubscribe: (() => void)) {
-    unsubscribeCallbacks.push(unsubscribe);
+    let aUUID = uuidv4();
+    unsubscribeCallbacksMap.set(aUUID, unsubscribe);
+    return aUUID;
 }
 
 function unsubScribeFromAllListeners() {
     // call each unsubscribe method
-    for (let i = 0; i < unsubscribeCallbacks.length; i++) {
-        const unsubscribe = unsubscribeCallbacks[i];
+    unsubscribeCallbacksMap.forEach((unsubscribe) => {
         unsubscribe();
+    });
+    // reset map
+    unsubscribeCallbacksMap.clear();
+}
+
+export function unsubscribeFromListener(id: string) {
+    const unsubscribe = unsubscribeCallbacksMap.get(id);
+    if (unsubscribe) {
+        unsubscribe();
+        unsubscribeCallbacksMap.delete(id);
+    } else {
+        console.error("No listener with the id " + id + " exists");
     }
-    // reset array
-    unsubscribeCallbacks = [];
 }
 
 export function logout() {

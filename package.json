@@ -22,6 +22,7 @@
     "react-firebaseui": "^4.1.0",
     "react-scripts": "4.0.3",
     "typescript": "^4.2.2",
+    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
@@ -64,6 +65,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.7",
+    "@types/uuid": "^8.3.0",
     "gh-pages": "^3.1.0",
     "react-router-dom": "^5.2.0"
   }
