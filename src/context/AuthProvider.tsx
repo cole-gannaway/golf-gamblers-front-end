@@ -39,7 +39,7 @@ export function AuthProvider(props: IAuthContextProps) {
                         if (snap.exists) {
                             const subData = snap.data();
                             if (subData?.subscriptionState === 'basic') {
-                                // currenlty only basic exists, can add different tiers using role
+                                // currently only basic exists, can add different tiers later
                                 setSubscriptionState({ subscriptionLevel: 'basic' })
                             }
                         }
@@ -121,7 +121,7 @@ export function deleteAccount(user: firebase.User) {
 }
 
 // MISC Stripe things
-export async function createPortalLink(functions: firebase.functions.Functions) {
+export async function createPortalLink() {
     // code copied from the docs that redirects to manage stripe account
     const functionRef = functions.httpsCallable('ext-firestore-stripe-subscriptions-createPortalLink');
     const { data } = await functionRef({ returnUrl: window.location.origin });
