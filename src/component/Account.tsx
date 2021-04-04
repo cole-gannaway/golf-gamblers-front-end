@@ -26,7 +26,8 @@ export default function Account() {
         logout();
     }
     const handleDeleteAccount = () => {
-        if (user) {
+        const confirmDelete = window.confirm("Are you sure?");
+        if (user && confirmDelete) {
             deleteAccount(user);
         }
     };
