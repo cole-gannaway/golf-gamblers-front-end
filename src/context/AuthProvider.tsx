@@ -8,7 +8,6 @@ import "firebase/firestore";
 import "firebase/functions";
 
 import FireBaseConfig from '../config/firebase.config.json'
-import StripeConfig from '../config/stripe.config.json'
 
 // initalize Firebase
 const app = (!firebase.apps.length) ? firebase.initializeApp(FireBaseConfig) : firebase.app();
@@ -33,17 +32,17 @@ export function AuthProvider(props: IAuthContextProps) {
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                const unsubscribe = db.collection('customers')
+                const unsubscribe = db.collection('users')
                     .doc(user.uid)
-                    .collection('subscriptions')
+                    .collection('user_only').doc('account_data')
                     .onSnapshot((snap) => {
-                        snap.forEach((subscription) => {
-                            const subData = subscription.data()
-                            if (subData.product.get(StripeConfig.subscription_product_key.basic)) {
+                        if (snap.exists) {
+                            const subData = snap.data();
+                            if (subData?.subscriptionState === 'basic') {
                                 // currenlty only basic exists, can add different tiers using role
                                 setSubscriptionState({ subscriptionLevel: 'basic' })
                             }
-                        });
+                        }
                     });
                 pushUnsubscribeCallback(unsubscribe);
             } else {
