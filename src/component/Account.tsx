@@ -9,6 +9,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 import { createPortalLink, getDb, getFunctions, useUserContext, logout, useSubscriptionContext, deleteAccount } from "../context/AuthProvider";
 import StripeConfig from '../config/stripe.config.json'
+import AppConfig from '../config/app.config.json'
 
 export default function Account() {
     const user = useUserContext();
@@ -72,15 +73,6 @@ export default function Account() {
 
     }
 
-
-    useEffect(() => {
-        db.collection('public_data').doc('app_info').get().then((snap) => {
-            const appInfo = snap.data();
-            setVersion(appInfo?.version);
-            const lastUpdated = appInfo?.last_update ? new Date(appInfo?.last_update.seconds * 1000).toString() : 'Unknown';
-            setVersionUpdated(lastUpdated);
-        });
-    }, [db])
     const matVariant = "outlined";
 
     return <div >
@@ -119,8 +111,7 @@ export default function Account() {
         <br></br>
         <div>
             <h2>Version Info</h2>
-            <div>Build: {version}</div>
-            <div>Last Updated: {versionUpdated}</div>
+            <div>UI version: {AppConfig.version}</div>
         </div>
         <div>
             <Button variant={matVariant} fullWidth={true} onClick={handleLogout} >Logout</Button>
