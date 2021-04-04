@@ -23,8 +23,16 @@ export default function Account() {
     const [isRedirectingToManageStripeAccount, setIsRedirectingToManageStripeAccount] = useState(false);
     const [isRedirectingToCreateSubscription, setIsRedirectingToCreateSubscription] = useState(false);
 
-    const [version, setVersion] = useState<string | undefined>(undefined);
-    const [versionUpdated, setVersionUpdated] = useState<string | undefined>(undefined);
+    const localVersion = AppConfig.version;
+    const [onlineVersion, setOnlineVersion] = useState<string | undefined>(undefined);
+
+    // request version information from the database
+    useEffect(() => {
+        db.collection('public_data').doc('app_info').get().then((snap) => {
+            const appInfo = snap.data();
+            setOnlineVersion(appInfo?.version);
+        });
+    }, [db])
 
     function handleLogout() {
         logout();
@@ -88,11 +96,11 @@ export default function Account() {
             <h2>Subscriptions</h2>
             <div>
                 {subscriptionState ?
+                    subscriptionState.subscriptionLevel.toUpperCase() :
+                    'NONE'}
+                {subscriptionState ?
                     <CheckCircleOutlineIcon style={{ color: "green" }}></CheckCircleOutlineIcon> :
                     <BlockIcon style={{ color: "red" }}></BlockIcon>}
-                {subscriptionState ?
-                    subscriptionState.subscriptionLevel.toUpperCase() :
-                    'NOT SUBSCRIBED'}
             </div>
             <br></br>
             {subscriptionState ?
@@ -111,8 +119,10 @@ export default function Account() {
         <br></br>
         <div>
             <h2>Version Info</h2>
-            <div>UI version: {AppConfig.version}</div>
+            <div>UI version: {localVersion}</div>
+            <div>Up to date: {onlineVersion === localVersion ? <CheckCircleOutlineIcon style={{ color: "green" }}></CheckCircleOutlineIcon> : <BlockIcon style={{ color: "red" }}></BlockIcon>}</div>
         </div>
+        <br></br>
         <div>
             <Button variant={matVariant} fullWidth={true} onClick={handleLogout} >Logout</Button>
         </div>
