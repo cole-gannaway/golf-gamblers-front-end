@@ -1,30 +1,44 @@
+// React
 import { useEffect, useState } from "react";
+
+// Router
+import { Link } from "react-router-dom";
+
+// Stripe
 import { useStripe } from "@stripe/react-stripe-js";
+import StripeConfig from '../config/stripe.config.json'
+
+// Material UI
 import { Button, TextField } from "@material-ui/core";
-import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import BlockIcon from '@material-ui/icons/Block';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 
-import { createPortalLink, getDb, getFunctions, useUserContext, logout, useSubscriptionContext, deleteAccount } from "../context/AuthProvider";
-import StripeConfig from '../config/stripe.config.json'
+// Provider
+import { createPortalLink, getDb, useUserContext, logout, useSubscriptionContext, deleteAccount } from "../context/AuthProvider";
+
+// Config files
 import AppConfig from '../config/app.config.json'
 
+// Snackbar
+import { useSnackbar } from 'notistack';
+
 export default function Account() {
+    // get global variables from providers
     const user = useUserContext();
     const db = getDb();
     const stripe = useStripe();
-    const functions = getFunctions();
     const subscriptionState = useSubscriptionContext();
+    const snackbar = useSnackbar();
 
+    // nickname
     const [displayName, setDisplayName] = useState(user?.displayName);
 
-    const [isRedirectingToManageStripeAccount, setIsRedirectingToManageStripeAccount] = useState(false);
-    const [isRedirectingToCreateSubscription, setIsRedirectingToCreateSubscription] = useState(false);
-
+    // versioning
     const localVersion = AppConfig.version;
     const [onlineVersion, setOnlineVersion] = useState<string | undefined>(undefined);
+    const isVersionUpToDate = onlineVersion === localVersion;
 
     // request version information from the database
     useEffect(() => {
@@ -34,6 +48,7 @@ export default function Account() {
         });
     }, [db])
 
+    // button click handlers
     function handleLogout() {
         logout();
     }
@@ -45,7 +60,7 @@ export default function Account() {
     };
     const handleCreateNewSubscription = async () => {
         if (user) {
-            setIsRedirectingToCreateSubscription(true);
+            snackbar.enqueueSnackbar('Redirecting to Stripe...', { variant: 'info' });
             const docRef = await db.collection('customers').doc(user.uid).collection('checkout_sessions').add({
                 price: StripeConfig.subscription_prices_keys.basic,// priceId from stripe
                 success_url: window.location.origin, // return user to this screen
@@ -63,7 +78,6 @@ export default function Account() {
                     if (sessionId) {
                         if (stripe) {
                             stripe.redirectToCheckout({ sessionId })
-                            setIsRedirectingToCreateSubscription(false);
                         }
                     }
                 }
@@ -72,9 +86,8 @@ export default function Account() {
 
     }
     async function handleCreatePortalLink() {
-        setIsRedirectingToManageStripeAccount(true);
-        await createPortalLink(functions);
-        setIsRedirectingToManageStripeAccount(false);
+        snackbar.enqueueSnackbar('Redirecting to Stripe...', { variant: 'info' });
+        await createPortalLink();
         return true;
     }
     function handleUpdateProfile() {
@@ -95,24 +108,19 @@ export default function Account() {
         <div>
             <h2>Subscriptions</h2>
             <div>
-                {subscriptionState ?
-                    subscriptionState.subscriptionLevel.toUpperCase() :
-                    'NONE'}
+                {subscriptionState?.subscriptionLevel ? subscriptionState.subscriptionLevel : 'None'}
                 {subscriptionState ?
                     <CheckCircleOutlineIcon style={{ color: "green" }}></CheckCircleOutlineIcon> :
                     <BlockIcon style={{ color: "red" }}></BlockIcon>}
+                {subscriptionState ?
+                    <div>
+                        <Button variant={matVariant} fullWidth={true} onClick={handleCreatePortalLink}>Manage Subscriptions</Button>
+                    </div> :
+                    <div>
+                        <Button variant={matVariant} fullWidth={true} onClick={handleCreateNewSubscription} >Subscribe</Button>
+                    </div>
+                }
             </div>
-            <br></br>
-            {subscriptionState ?
-                <div>
-                    <Button variant={matVariant} fullWidth={true} onClick={handleCreatePortalLink}>Manage Subscriptions</Button>
-                    {isRedirectingToManageStripeAccount ? <CircularProgress /> : <div></div>}
-                </div> :
-                <div>
-                    <Button variant={matVariant} fullWidth={true} onClick={handleCreateNewSubscription} >Subscribe</Button>
-                    {isRedirectingToCreateSubscription ? <CircularProgress /> : <div></div>}
-                </div>
-            }
             {/* give more information below */}
             {/* new Date(subData.cancel_at.seconds*1000).toLocaleDateString() */}
         </div>
@@ -120,7 +128,16 @@ export default function Account() {
         <div>
             <h2>Version Info</h2>
             <div>UI version: {localVersion}</div>
-            <div>Up to date: {onlineVersion === localVersion ? <CheckCircleOutlineIcon style={{ color: "green" }}></CheckCircleOutlineIcon> : <BlockIcon style={{ color: "red" }}></BlockIcon>}</div>
+            <div>Up to date: {isVersionUpToDate ?
+                <CheckCircleOutlineIcon style={{ color: "green" }}></CheckCircleOutlineIcon> :
+                <div>
+                    <BlockIcon style={{ color: "red" }}></BlockIcon>
+                    <p>
+                        Your app is out of date. The current version is {onlineVersion}<br></br>
+                        Follow the instructions <Link to="/install">here</Link> if you need help reinstalling the app.
+                    </p>
+                </div>}
+            </div>
         </div>
         <br></br>
         <div>
@@ -130,5 +147,6 @@ export default function Account() {
         <div>
             <Button variant={matVariant} fullWidth={true} startIcon={<DeleteIcon />} onClick={handleDeleteAccount} color="secondary">Delete Account</Button>
         </div>
+
     </div>
 }
