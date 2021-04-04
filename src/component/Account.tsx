@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStripe } from "@stripe/react-stripe-js";
 import { Button, TextField } from "@material-ui/core";
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -21,6 +21,9 @@ export default function Account() {
 
     const [isRedirectingToManageStripeAccount, setIsRedirectingToManageStripeAccount] = useState(false);
     const [isRedirectingToCreateSubscription, setIsRedirectingToCreateSubscription] = useState(false);
+
+    const [version, setVersion] = useState<string | undefined>(undefined);
+    const [versionUpdated, setVersionUpdated] = useState<string | undefined>(undefined);
 
     function handleLogout() {
         logout();
@@ -68,6 +71,16 @@ export default function Account() {
     function handleUpdateProfile() {
 
     }
+
+
+    useEffect(() => {
+        db.collection('public_data').doc('app_info').get().then((snap) => {
+            const appInfo = snap.data();
+            setVersion(appInfo?.version);
+            const lastUpdated = appInfo?.last_update ? new Date(appInfo?.last_update.seconds * 1000).toString() : 'Unknown';
+            setVersionUpdated(lastUpdated);
+        });
+    }, [db])
     const matVariant = "outlined";
 
     return <div >
@@ -104,6 +117,11 @@ export default function Account() {
             {/* new Date(subData.cancel_at.seconds*1000).toLocaleDateString() */}
         </div>
         <br></br>
+        <div>
+            <h2>Version Info</h2>
+            <div>Build: {version}</div>
+            <div>Last Updated: {versionUpdated}</div>
+        </div>
         <div>
             <Button variant={matVariant} fullWidth={true} onClick={handleLogout} >Logout</Button>
         </div>
