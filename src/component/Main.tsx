@@ -9,7 +9,7 @@ import { useUserContext } from "../context/AuthProvider";
 import Account from "./Account";
 import Login from "./auth/Login";
 import Home from "./Home";
-import Info from "./Info";
+import Install from "./Install";
 import NavBar from "./NavBar";
 
 export default function Main() {
@@ -20,8 +20,8 @@ export default function Main() {
                 <Route path="/login">
                     <Login></Login>
                 </Route>
-                <Route path="/info">
-                    <Info></Info>
+                <Route path="/install">
+                    <Install></Install>
                 </Route>
                 <PrivateRoute path="/account">
                     <Account></Account>
