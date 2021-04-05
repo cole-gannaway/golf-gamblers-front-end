@@ -9,8 +9,7 @@ export default function Home() {
         <div>
             {subscriptionState ? <div></div> :
                 <div>
-                    <div>Update your subscription to see this content</div>
-                    <div><Link to="/account">Subscribe</Link></div>
+                    <p>Update your account's subscription to see this content.</p>
                 </div>
             }
         </div>
