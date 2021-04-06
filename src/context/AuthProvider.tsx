@@ -34,13 +34,13 @@ export function AuthProvider(props: IAuthContextProps) {
             if (user) {
                 const unsubscribe = db.collection('users')
                     .doc(user.uid)
-                    .collection('user_only').doc('account_data')
+                    .collection('private').doc('account-data')
                     .onSnapshot((snap) => {
                         if (snap.exists) {
                             const subData = snap.data();
-                            if (subData?.subscriptionState === 'basic') {
-                                // currently only basic exists, can add different tiers later
-                                setSubscriptionState({ subscriptionLevel: 'basic' })
+                            if (subData?.subscriptionState === 'Basic') {
+                                // currently only Basic exists, can add different tiers later
+                                setSubscriptionState({ subscriptionLevel: 'Basic' })
                             }
                         }
                     });
@@ -136,7 +136,7 @@ export const uiConfig: firebaseui.auth.Config = {
     signInFlow: 'popup',
     // We will display email
     signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID
     ],
     callbacks: {
         // Avoid redirects after sign-in.
